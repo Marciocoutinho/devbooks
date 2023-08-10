@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
-
 import { Link, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 
 import { BookState as Book } from '../BookDetail'
 
 import { googleBooksApi } from '../../services/googleBooksApi'
 
+import { Spinner } from '../../components/Spinner'
 import { Thumbnail } from '../../components/Thumbnail/Thumbnail'
 
-import { Container, Title, SubTitle } from './Books.styles'
+import { Container, Title, Subtitle } from './Books.styles'
 
 interface BooksState {
   totalItems: number
@@ -37,11 +37,11 @@ export function Books() {
     <Container>
       <h1>Resultado da sua busca</h1>
 
-      {books && (
+      {books ? (
         <ul>
           {books.items.map((book) => (
             <li key={book.id}>
-              <Link to={'/Books/${book.id}'}>
+              <Link to={`/books/${book.id}`}>
                 <Thumbnail
                   thumbnail={book.volumeInfo.imageLinks?.thumbnail}
                   title={book.volumeInfo.title}
@@ -49,11 +49,13 @@ export function Books() {
                 />
 
                 <Title>{book.volumeInfo.title}</Title>
-                <SubTitle>{book.volumeInfo.subtitle}</SubTitle>
+                <Subtitle>{book.volumeInfo.subtitle}</Subtitle>
               </Link>
             </li>
           ))}
         </ul>
+      ) : (
+        <Spinner />
       )}
     </Container>
   )

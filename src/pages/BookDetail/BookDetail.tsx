@@ -1,5 +1,23 @@
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import ReactHTMLParser from 'react-html-parser'
+
+import {
+  Container,
+  Content,
+  Title,
+  Subtitle,
+  Description,
+  BackButton,
+  SpinnerContainer
+} from './BookDetail.styles'
+
+import { googleBooksApi } from '../../services/googleBooksApi'
+
+import { Spinner } from '../../components/Spinner'
+import { Thumbnail } from '../../components/Thumbnail/Thumbnail'
+
+import { ReactComponent as ArrowLeftIcon } from '../../icons/arrow-left.svg'
 
 export interface BookState {
   id: string
@@ -16,10 +34,47 @@ export interface BookState {
 export function BookDetail() {
   const [book, setBook] = useState<BookState | null>(null)
   const params = useParams()
+  const navigate = useNavigate()
 
   const { bookId } = params
 
-  console.log({ bookId })
+  useEffect(() => {
+    googleBooksApi
+      .get(`/v1/volumes/${bookId}`)
+      .then((response) => setBook(response.data))
+  }, [bookId])
 
-  return <h1>Detalhes do Livro</h1>
+  const handleGoBack = () => {
+    navigate(-1)
+  }
+
+  return (
+    <Container>
+      {book ? (
+        <>
+          <BackButton onClick={handleGoBack}>
+            <ArrowLeftIcon />
+          </BackButton>
+          <Thumbnail
+            thumbnail={book.volumeInfo.imageLinks?.thumbnail}
+            title={book.volumeInfo.title}
+            size="large"
+            bgColor="#ef552b"
+          />
+
+          <Content>
+            <Title>{book.volumeInfo.title}</Title>
+            <Subtitle>{book.volumeInfo.subtitle}</Subtitle>
+            <Description>
+              {ReactHTMLParser(book.volumeInfo.description)}
+            </Description>
+          </Content>
+        </>
+      ) : (
+        <SpinnerContainer>
+          <Spinner />
+        </SpinnerContainer>
+      )}
+    </Container>
+  )
 }
