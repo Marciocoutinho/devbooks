@@ -5,11 +5,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { GlobalStyle } from './styles/global'
 import { theme } from './styles/theme'
 
+import { RequireAuth } from './components/RequireAuth/RequireAuth'
+
 import { Signin } from './pages/Auth/Signin'
 import { SignUp } from './pages/Auth/SignUp'
 import { AuthProvider } from './context/AuthContext'
-import { Home } from './pages/Home/Home'
-import { RequireAuth } from './components/RequireAuth/RequireAuth'
+import { Home } from './pages/Home'
+import { Books } from './pages/Books'
 
 const queryClient = new QueryClient()
 
@@ -28,6 +30,14 @@ function App() {
                 element={
                   <RequireAuth>
                     <Home />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/livros"
+                element={
+                  <RequireAuth>
+                    <Books />
                   </RequireAuth>
                 }
               />
