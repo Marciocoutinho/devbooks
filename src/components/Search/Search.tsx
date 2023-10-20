@@ -14,6 +14,7 @@ import { Book, SearchResultBook } from '../SearchResultBook/SearchResultBook'
 import { SearchLoader } from './SearchLoader'
 import { useOutsideInteraction } from '../../hooks/useOutsideInteraction'
 import { useLazyBooksQuery } from '../../hooks/useBooksQuery'
+import { SkeletonLoader } from '../SkeletonLoader'
 
 interface ResultState {
   items: Book[]

@@ -10,7 +10,7 @@ export function SearchLoader() {
 
           <TextContainer>
             <SkeletonLoader
-              width={skeleton % 2 === 0 ? '12rem' : '22ren'}
+              width={skeleton % 2 === 0 ? '12rem' : '22rem'}
               height="2.4rem"
             />
             <SkeletonLoader width="8rem" height="1.6rem" />

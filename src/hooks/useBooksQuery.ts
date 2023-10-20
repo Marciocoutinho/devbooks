@@ -1,19 +1,8 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { api } from '../services/api'
-import { useState } from 'react'
-
-interface Book {
-  id: string
-  volumeInfo: {
-    title: string
-    description: string
-    imageLinks?: {
-      thumbnail: string
-    }
-    authors: string[]
-  }
-}
+import { Book } from '../models/Book'
 
 interface BooksQueryResponse {
   totalItems: number
@@ -30,7 +19,7 @@ async function fetchBooks({
   maxResults
 }: BooksQueryArgs): Promise<BooksQueryResponse> {
   const { data } = await api.get<BooksQueryResponse>(
-    `/books?=${search}&maxResults=${maxResults}`
+    `/books?q=${search}&maxResults=${maxResults}`
   )
 
   return data
