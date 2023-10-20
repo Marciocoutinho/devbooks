@@ -9,16 +9,10 @@ import {
   SearchResultBookContainer,
   SeeAllContainers
 } from './Search.styles'
-import { api } from '../../services/api'
-import { Book, SearchResultBook } from '../SearchResultBook/SearchResultBook'
+import { SearchResultBook } from '../SearchResultBook/SearchResultBook'
 import { SearchLoader } from './SearchLoader'
 import { useOutsideInteraction } from '../../hooks/useOutsideInteraction'
 import { useLazyBooksQuery } from '../../hooks/useBooksQuery'
-import { SkeletonLoader } from '../SkeletonLoader'
-
-interface ResultState {
-  items: Book[]
-}
 
 export function Search() {
   const [search, setSearch] = useState('')
