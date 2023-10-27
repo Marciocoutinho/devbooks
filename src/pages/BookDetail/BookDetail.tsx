@@ -2,7 +2,6 @@ import { useParams } from 'react-router-dom'
 import reactHtmlParser from 'react-html-parser'
 
 import { useBookDetailsQuery } from '../../hooks/useBookDetails'
-import { useThumbnail } from '../../hooks/useThumbnail'
 
 import { MainLayout } from '../../layouts/MainLayout'
 
@@ -25,6 +24,7 @@ import { BookDetailLoader } from './BookDetailLoader'
 import { MyBookButton } from './MyBookButton'
 import { BookState } from '../../models/BookState'
 import { useAddToMyBooksMutation } from '../../hooks/useAddMyBooksMutation'
+import { generateThumbnailSrc } from '../../utils/generateThumbnailSrc'
 
 export function BookDetail() {
   const params = useParams()
@@ -33,8 +33,6 @@ export function BookDetail() {
   const { data, isLoading } = useBookDetailsQuery({
     bookId: params.bookId as string
   })
-
-  const thumbnailSrc = useThumbnail({ bookId: data?.id as string })
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('pt-BR', {
@@ -123,8 +121,10 @@ export function BookDetail() {
           </ContentContainer>
 
           <ThumbnailContainer>
-            <Thumbnail src={thumbnailSrc} />
-            <BackgroundThumbnail src={thumbnailSrc} />
+            <Thumbnail src={generateThumbnailSrc({ bookId: data.id })} />
+            <BackgroundThumbnail
+              src={generateThumbnailSrc({ bookId: data.id })}
+            />
           </ThumbnailContainer>
         </Container>
       ) : (
