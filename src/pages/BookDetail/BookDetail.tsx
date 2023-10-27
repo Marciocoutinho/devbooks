@@ -6,8 +6,6 @@ import { useThumbnail } from '../../hooks/useThumbnail'
 
 import { MainLayout } from '../../layouts/MainLayout'
 
-import { Button } from '../../components/Button'
-
 import { ReactComponent as StarIcon } from '../../icons/star.svg'
 
 import {
@@ -24,9 +22,13 @@ import {
   ThumbnailContainer
 } from './BookDetail.styles'
 import { BookDetailLoader } from './BookDetailLoader'
+import { MyBookButton } from './MyBookButton'
+import { BookState } from '../../models/BookState'
+import { useAddToMyBooksMutation } from '../../hooks/useAddMyBooksMutation'
 
 export function BookDetail() {
   const params = useParams()
+  const addToMyBooksMutation = useAddToMyBooksMutation()
 
   const { data, isLoading } = useBookDetailsQuery({
     bookId: params.bookId as string
@@ -39,6 +41,16 @@ export function BookDetail() {
       month: 'short',
       year: 'numeric'
     }).format(date)
+  }
+
+  //Higher order function
+  const handleAddToMyBookList = (bookState: BookState) => async () => {
+    if (params.bookId) {
+      addToMyBooksMutation.mutateAsync({
+        bookId: params.bookId,
+        bookState
+      })
+    }
   }
 
   return (
@@ -78,9 +90,27 @@ export function BookDetail() {
             </DetailsContainer>
 
             <ButtonsContainer>
-              <Button variant="outlined">Estou Lendo</Button>
-              <Button variant="outlined">Quero Ler</Button>
-              <Button variant="outlined">Já Li</Button>
+              <MyBookButton
+                isSelected={data.bookState === 'IS_READING'}
+                onAddBookList={handleAddToMyBookList('IS_READING')}
+                disabled={false}
+              >
+                Estou Lendo
+              </MyBookButton>
+              <MyBookButton
+                isSelected={data.bookState === 'WANTS_TO_READ'}
+                onAddBookList={handleAddToMyBookList('WANTS_TO_READ')}
+                disabled={false}
+              >
+                Quero Ler
+              </MyBookButton>
+              <MyBookButton
+                isSelected={data.bookState === 'READ'}
+                onAddBookList={handleAddToMyBookList('READ')}
+                disabled={false}
+              >
+                Já Li
+              </MyBookButton>
             </ButtonsContainer>
 
             <DescriptionContainer>
